@@ -1,0 +1,4 @@
+title,platform,topic,difficulty,url,status,statement,notes
+Second Highest Salary,LeetCode,Subqueries,Medium,https://leetcode.com/problems/second-highest-salary/,Not Started,,Remember NULL when there is no second-highest value.
+Count sales per day,GFG,GROUP BY,Easy,https://www.geeksforgeeks.org/sql/sql-exercises/,Not Started,,Group on the date then count rows.
+Top Grade per Student,TUF,Window Functions,Medium,https://takeuforward.org/practice/sql,Not Started,,Think about partitioning by student.

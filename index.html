@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#111827" />
+  <title>QueryQuest — SQL Practice Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">Q<span>Q</span></div>
+        <div><div class="brand-name">QueryQuest</div><div class="brand-sub">SQL PRACTICE TRACKER</div></div>
+      </div>
+      <div class="sidebar-label">WORKSPACE</div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-link active" data-view="dashboard"><span class="nav-ico">▦</span> Dashboard</button>
+        <button class="nav-link" data-view="questions"><span class="nav-ico">☷</span> All questions <span class="nav-count" id="navQuestionCount">—</span></button>
+        <button class="nav-link" data-view="practice"><span class="nav-ico">⌁</span> Practice queue</button>
+        <button class="nav-link" data-view="saved"><span class="nav-ico">▤</span> Saved SQL</button>
+      </nav>
+      <div class="sidebar-label platform-label">PLATFORMS</div>
+      <div class="platform-links">
+        <button class="platform-link" data-platform="LeetCode"><span class="platform-dot lc">L</span> LeetCode <span class="external-mark">↗</span></button>
+        <button class="platform-link" data-platform="TUF"><span class="platform-dot tuf">T</span> TakeUForward <span class="external-mark">↗</span></button>
+        <button class="platform-link" data-platform="GFG"><span class="platform-dot gfg">G</span> GeeksforGeeks <span class="external-mark">↗</span></button>
+        <button class="platform-link" data-platform="HackerRank"><span class="platform-dot hr">H</span> HackerRank <span class="external-mark">↗</span></button>
+        <button class="platform-link" data-platform="DataLemur"><span class="platform-dot dl">D</span> DataLemur <span class="external-mark">↗</span></button>
+        <button class="platform-link" data-platform="SQLPractice"><span class="platform-dot sp">S</span> SQLPractice <span class="external-mark">↗</span></button>
+      </div>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-note">
+        <div class="note-icon">✦</div>
+        <div class="note-title">Small steps. Strong SQL.</div>
+        <p>Track every attempt. Keep both your first and best query.</p>
+      </div>
+      <div class="sidebar-bottom"><span class="local-indicator"></span> Saved on this device <span class="tiny-lock">⌑</span></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Toggle sidebar">☰</button>
+        <div class="breadcrumb"><span>Workspace</span><span class="crumb-sep">/</span><strong id="breadcrumbCurrent">Dashboard</strong></div>
+        <div class="topbar-actions">
+          <label class="global-search"><span>⌕</span><input id="globalSearch" type="search" placeholder="Search questions, topics…" autocomplete="off" /><kbd>⌘ K</kbd></label>
+          <button class="icon-btn" id="exportAllTop" title="Export all saved SQL as TXT">↓<span class="sr-only">Export SQL</span></button>
+          <button class="avatar" title="Local profile">B</button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-dashboard">
+        <div class="welcome-row">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> YOUR SQL JOURNEY</div>
+            <h1>Make every query <span>count.</span></h1>
+            <p class="welcome-copy">One place for LeetCode, TUF, GFG, HackerRank and data-interview SQL practice — from first attempt to interview-ready.</p>
+          </div>
+          <div class="hero-art" aria-hidden="true"><div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div><div class="hero-terminal"><div class="terminal-bar"><i></i><i></i><i></i><span>query.sql</span></div><div class="terminal-code"><span class="kw">SELECT</span> <span class="col">progress</span><br><span class="kw">FROM</span> <span class="tbl">practice</span><br><span class="kw">WHERE</span> <span class="col">consistent</span> = <span class="str">TRUE</span><span class="cursor">▍</span></div></div><div class="hero-badge">⌁ <span>+1 better query</span></div></div>
+        </div>
+
+        <div class="quick-actions">
+          <button class="btn btn-primary" id="addQuestionHero"><span>＋</span> Add question</button>
+          <button class="btn btn-secondary" id="startPracticeHero"><span>▷</span> Start practicing</button>
+          <div class="quick-tip"><span class="tip-spark">✦</span><span>Today’s win: <strong id="todaySolved">0 solved</strong></span></div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card stat-total"><div class="stat-top"><span class="stat-label">Question bank</span><span class="stat-icon">☷</span></div><div class="stat-value" id="statTotal">0</div><div class="stat-foot"><span class="stat-neutral" id="sourceCount">Across 6 platforms</span></div><div class="stat-decoration decor-grid"></div></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-label">Solved</span><span class="stat-icon icon-green">✓</span></div><div class="stat-value" id="statSolved">0</div><div class="stat-foot"><span class="positive" id="solvedRate">0%</span><span> of your bank</span></div><div class="mini-progress"><span id="solvedBar"></span></div></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-label">In progress</span><span class="stat-icon icon-amber">◷</span></div><div class="stat-value" id="statProgress">0</div><div class="stat-foot"><span>Keep your streak moving</span></div><div class="mini-progress amber"><span id="progressBar"></span></div></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-label">Queries saved</span><span class="stat-icon icon-violet">⌘</span></div><div class="stat-value" id="statQueries">0</div><div class="stat-foot"><span>Brute force + optimized</span></div><div class="mini-progress violet"><span id="queriesBar"></span></div></article>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel focus-panel">
+            <div class="panel-heading"><div><h2>Pick up where you left off</h2><p>Questions waiting for your next attempt</p></div><button class="text-btn" data-go="practice">View queue <span>→</span></button></div>
+            <div id="resumeList" class="resume-list"></div>
+          </section>
+          <section class="panel difficulty-panel">
+            <div class="panel-heading"><div><h2>Difficulty breakdown</h2><p>Your question bank at a glance</p></div><span class="chart-label">ALL QUESTIONS</span></div>
+            <div class="difficulty-total"><strong id="difficultyTotal">0</strong><span>total questions</span></div>
+            <div class="difficulty-chart" id="difficultyChart"></div>
+            <div class="legend-row"><span><i class="legend-dot easy"></i> Easy</span><span><i class="legend-dot medium"></i> Medium</span><span><i class="legend-dot hard"></i> Hard</span></div>
+          </section>
+        </div>
+
+        <div class="section-heading-row"><div><div class="eyebrow small-eyebrow">KEEP THE MOMENTUM</div><h2>Explore by topic</h2></div><button class="text-btn" data-go="questions">All questions <span>→</span></button></div>
+        <div class="topic-grid" id="topicGrid"></div>
+        <div class="source-callout"><div class="source-callout-icon">↗</div><div><strong>Practice on the original platform</strong><p>Open each source problem in a new tab, solve it there, then come back here to save your brute-force and optimized SQL.</p></div><div class="source-shortcuts"><a href="https://leetcode.com/studyplan/top-sql-50/" target="_blank" rel="noopener">LeetCode SQL 50 ↗</a><a href="https://takeuforward.org/practice/sql" target="_blank" rel="noopener">TUF SQL Practice ↗</a><a href="https://www.geeksforgeeks.org/sql/sql-exercises/" target="_blank" rel="noopener">GFG SQL Exercises ↗</a><a href="https://www.hackerrank.com/domains/sql" target="_blank" rel="noopener">HackerRank SQL ↗</a><a href="https://datalemur.com/questions?category=SQL" target="_blank" rel="noopener">DataLemur SQL ↗</a><a href="https://www.sqlpractice.in/sql75" target="_blank" rel="noopener">SQLPractice ↗</a></div></div>
+      </section>
+
+      <section class="view" id="view-questions">
+        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> QUESTION LIBRARY</div><h1>All questions</h1><p>Organize every SQL problem by source, topic, difficulty and progress.</p></div><button class="btn btn-primary" id="addQuestionBtn"><span>＋</span> Add question</button></div>
+        <div class="filter-panel">
+          <div class="filter-search"><span>⌕</span><input id="questionSearch" placeholder="Search title or topic…" /></div>
+          <select id="filterPlatform" aria-label="Filter platform"><option value="All">All platforms</option><option>LeetCode</option><option>TUF</option><option>GFG</option><option>HackerRank</option><option>DataLemur</option><option>SQLPractice</option><option>Custom</option></select>
+          <select id="filterTopic" aria-label="Filter topic"><option value="All">All topics</option></select>
+          <select id="filterDifficulty" aria-label="Filter difficulty"><option value="All">All difficulties</option><option>Easy</option><option>Medium</option><option>Hard</option></select>
+          <select id="filterStatus" aria-label="Filter status"><option value="All">All progress</option><option>Not Started</option><option>In Progress</option><option>Solved</option><option>Review</option></select>
+          <button class="filter-reset" id="resetFilters">Reset</button>
+        </div>
+        <div class="table-toolbar"><div><strong id="resultsCount">0</strong> questions <span class="toolbar-muted">shown</span></div><div class="table-tools"><button class="btn btn-small btn-outline" id="importCsvBtn">↑ Import CSV</button><button class="btn btn-small btn-outline" id="exportCsvBtn">↓ Export CSV</button><button class="btn btn-small btn-outline" id="exportJsonBtn">Backup JSON</button></div></div>
+        <div class="table-wrap"><table class="questions-table"><thead><tr><th class="checkbox-col"><input type="checkbox" id="selectAllRows" aria-label="Select all visible rows"></th><th>QUESTION</th><th>PLATFORM</th><th>TOPIC</th><th>DIFFICULTY</th><th>STATUS</th><th>ACTIONS</th></tr></thead><tbody id="questionsTableBody"></tbody></table><div class="empty-state" id="emptyQuestions" hidden><div class="empty-icon">⌕</div><h3>No questions found</h3><p>Adjust your filters or add a new SQL problem to the tracker.</p><button class="btn btn-primary" id="emptyAddBtn">＋ Add first question</button></div></div>
+        <div class="table-footer"><span id="tableFooterText">Local question bank</span><div class="bulk-actions" id="bulkActions" hidden><span id="selectedCount">0 selected</span><select id="bulkStatus"><option value="">Change status…</option><option>Not Started</option><option>In Progress</option><option>Solved</option><option>Review</option></select><button class="btn btn-small btn-secondary" id="applyBulkStatus">Apply</button><button class="text-btn danger-text" id="deleteSelected">Delete selected</button></div></div>
+      </section>
+
+      <section class="view" id="view-practice">
+        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> FOCUSED LEARNING</div><h1>Practice queue</h1><p>Start with untouched problems, revisit tricky ones, and mark each attempt as you go.</p></div><button class="btn btn-primary" id="practiceRandomBtn">⤨ Pick one for me</button></div>
+        <div class="queue-summary" id="queueSummary"></div>
+        <div class="queue-toolbar"><div class="segmented" id="queueSegments"><button class="selected" data-queue="All">All pending</button><button data-queue="Not Started">Not started</button><button data-queue="In Progress">In progress</button><button data-queue="Review">Review</button></div><select id="queueDifficulty"><option value="All">All difficulty</option><option>Easy</option><option>Medium</option><option>Hard</option></select></div>
+        <div class="queue-grid" id="queueGrid"></div>
+      </section>
+
+      <section class="view" id="view-saved">
+        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> YOUR SOLUTION LIBRARY</div><h1>Saved SQL</h1><p>Keep your first solution, improved solution, notes and complexity in one place.</p></div><button class="btn btn-primary" id="exportAllBtn">↓ Export all queries (.txt)</button></div>
+        <div class="saved-summary" id="savedSummary"></div>
+        <div class="saved-filters"><label class="filter-search"><span>⌕</span><input id="savedSearch" placeholder="Search saved queries…" /></label><select id="savedKind"><option value="All">All query types</option><option value="Brute force">Brute force</option><option value="Optimized">Optimized</option></select></div>
+        <div id="savedQueryList" class="saved-query-list"></div>
+      </section>
+
+      <footer class="app-footer"><span>QueryQuest <span class="footer-dot">•</span> Built for consistent SQL practice</span><span><span class="local-indicator"></span> Local-first storage · <button class="footer-link" id="manageDataFooter">Manage data</button></span></footer>
+    </main>
+  </div>
+
+  <!-- Add/edit question dialog -->
+  <div class="modal-backdrop" id="questionModal" hidden>
+    <div class="modal modal-medium" role="dialog" aria-modal="true" aria-labelledby="questionModalTitle">
+      <div class="modal-header"><div><div class="eyebrow small-eyebrow">QUESTION DETAILS</div><h2 id="questionModalTitle">Add a question</h2></div><button class="close-btn" data-close="questionModal" aria-label="Close">×</button></div>
+      <form id="questionForm">
+        <input type="hidden" id="questionId" />
+        <div class="form-grid">
+          <label class="form-field span-2"><span>Question title <b>*</b></span><input id="questionTitle" required maxlength="180" placeholder="e.g. Second Highest Salary" /></label>
+          <label class="form-field"><span>Platform <b>*</b></span><select id="questionPlatform" required><option>LeetCode</option><option>TUF</option><option>GFG</option><option>HackerRank</option><option>DataLemur</option><option>SQLPractice</option><option>Custom</option></select></label>
+          <label class="form-field"><span>Difficulty <b>*</b></span><select id="questionDifficulty" required><option>Easy</option><option>Medium</option><option>Hard</option></select></label>
+          <label class="form-field"><span>Topic <b>*</b></span><input id="questionTopic" list="topicOptions" required placeholder="e.g. Window Functions" /><datalist id="topicOptions"></datalist></label>
+          <label class="form-field"><span>Progress status</span><select id="questionStatus"><option>Not Started</option><option>In Progress</option><option>Solved</option><option>Review</option></select></label>
+          <label class="form-field span-2"><span>Problem URL</span><input id="questionUrl" type="url" placeholder="https://…" /></label>
+          <label class="form-field span-2"><span>Question statement / reminder</span><textarea id="questionStatement" rows="3" placeholder="Paste the prompt or your own short reminder…"></textarea></label>
+          <label class="form-field span-2"><span>Personal notes</span><textarea id="questionNotes" rows="2" placeholder="Edge cases, hints, what to revise…"></textarea></label>
+        </div>
+        <div class="modal-actions"><button type="button" class="btn btn-secondary" data-close="questionModal">Cancel</button><button type="submit" class="btn btn-primary" id="saveQuestionBtn">Save question</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SQL workspace dialog -->
+  <div class="modal-backdrop" id="queryModal" hidden>
+    <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="queryModalTitle">
+      <div class="modal-header query-modal-heading"><div><div class="eyebrow small-eyebrow">PRACTICE WORKSPACE</div><h2 id="queryModalTitle">Save your solution</h2><div class="query-subtitle" id="queryModalSubtitle"></div></div><div class="modal-header-actions"><button class="btn btn-small btn-outline" id="exportSingleTxt">↓ Export .txt</button><button class="close-btn" data-close="queryModal" aria-label="Close">×</button></div></div>
+      <form id="queryForm">
+        <input type="hidden" id="queryQuestionId" />
+        <div class="query-layout">
+          <div class="query-main">
+            <div class="sql-editor-card"><div class="editor-header"><div class="editor-title"><span class="editor-dot"></span> First attempt <span class="editor-label">BRUTE FORCE</span></div><span class="editor-lang">SQL</span></div><textarea id="bruteQuery" class="sql-textarea" spellcheck="false" placeholder="-- Start with a straightforward solution…"></textarea><div class="editor-foot"><span>Save your initial approach, even if it can be improved.</span><button type="button" class="mini-copy" data-copy="bruteQuery">Copy</button></div></div>
+            <div class="sql-editor-card optimized-card"><div class="editor-header"><div class="editor-title"><span class="editor-dot optimized-dot"></span> Best solution <span class="editor-label optimized-label">OPTIMIZED</span></div><span class="editor-lang">SQL</span></div><textarea id="optimizedQuery" class="sql-textarea" spellcheck="false" placeholder="-- Refactor for readability, correctness, or performance…"></textarea><div class="editor-foot"><span>Your cleanest final query goes here.</span><button type="button" class="mini-copy" data-copy="optimizedQuery">Copy</button></div></div>
+          </div>
+          <aside class="query-sidebar">
+            <div class="query-side-card"><h3>Attempt details</h3><label class="form-field"><span>Practice status</span><select id="queryStatus"><option>Not Started</option><option>In Progress</option><option>Solved</option><option>Review</option></select></label><label class="form-field"><span>Attempts made</span><input id="queryAttempts" type="number" min="0" step="1" value="0" /></label><label class="form-field"><span>Time complexity</span><input id="complexityTime" placeholder="e.g. O(n log n)" /></label><label class="form-field"><span>Space complexity</span><input id="complexitySpace" placeholder="e.g. O(1)" /></label></div>
+            <div class="query-side-card"><h3>What did you learn?</h3><label class="form-field"><span>Approach / explanation</span><textarea id="queryExplanation" rows="5" placeholder="Why it works, key insight, edge cases…"></textarea></label><label class="form-field"><span>Revision note</span><textarea id="queryNotes" rows="3" placeholder="What should future-you remember?"></textarea></label></div>
+            <div class="query-tip"><span>✦</span><p><strong>Interview habit</strong><br>Write a baseline query first, then explain why your optimized version is better.</p></div>
+          </aside>
+        </div>
+        <div class="modal-actions sticky-modal-actions"><span class="autosave-hint"><span class="local-indicator"></span> Saved when you click Save solution</span><div><button type="button" class="btn btn-secondary" data-close="queryModal">Cancel</button> <button type="submit" class="btn btn-primary">Save solution</button></div></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Data management dialog -->
+  <div class="modal-backdrop" id="dataModal" hidden>
+    <div class="modal modal-medium" role="dialog" aria-modal="true" aria-labelledby="dataModalTitle">
+      <div class="modal-header"><div><div class="eyebrow small-eyebrow">PORTABILITY & SAFETY</div><h2 id="dataModalTitle">Manage your data</h2></div><button class="close-btn" data-close="dataModal" aria-label="Close">×</button></div>
+      <div class="data-notice"><span>ⓘ</span><p>Your progress is stored in this browser on this device. Export a JSON backup before clearing site data or switching computers.</p></div>
+      <div class="data-actions-grid"><button class="data-action" id="dataExportJson"><span class="data-action-icon">↓</span><span><strong>Export backup (JSON)</strong><small>Questions, statuses, attempts and saved queries</small></span><span>→</span></button><button class="data-action" id="dataImportJson"><span class="data-action-icon">↑</span><span><strong>Restore backup (JSON)</strong><small>Replace this browser's question bank from a backup</small></span><span>→</span></button><button class="data-action" id="dataImportCsv"><span class="data-action-icon">⇧</span><span><strong>Import questions (CSV)</strong><small>Add rows from a spreadsheet or question sheet</small></span><span>→</span></button><button class="data-action" id="dataExportTxt"><span class="data-action-icon">≡</span><span><strong>Export all SQL (TXT)</strong><small>Human-readable solutions you can keep in a folder</small></span><span>→</span></button></div>
+      <div class="data-danger"><div><strong>Reset starter bank</strong><p>Deletes local changes and restores the original starter questions.</p></div><button class="btn btn-danger-outline" id="resetStarterBtn">Reset bank</button></div>
+      <div class="modal-actions"><button class="btn btn-secondary" data-close="dataModal">Done</button></div>
+    </div>
+  </div>
+  <input type="file" id="csvFileInput" accept=".csv,text/csv" hidden />
+  <input type="file" id="jsonFileInput" accept=".json,application/json" hidden />
+  <div id="toastRegion" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <script src="seed-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
